@@ -1,0 +1,6 @@
+[submodule "Noisemap-Generator"]
+	path = Noisemap-Generator
+	url = https://github.com/Geek-Fish/Noisemap-Generator
+[submodule "PerlinNoise"]
+	path = PerlinNoise
+	url = https://github.com/Reputeless/PerlinNoise
