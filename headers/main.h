@@ -11,6 +11,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <json/json.h>
 #include "../PerlinNoise/PerlinNoise.hpp"
+#include "../headers/constrained.h"
 
 #define SPEED_LIMITER 16666
 #define HM_SIZE 256

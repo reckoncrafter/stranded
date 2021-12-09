@@ -37,7 +37,7 @@ int main(){
 
     SDL_Point origin = placeLocation(map.hm);
 
-    Item items[NUM_ITEMS];
+    Cache items[NUM_ITEMS];
     SDL_Point pois[NUM_POIS];
 
     for(int i = 0; i < NUM_ITEMS; i++){

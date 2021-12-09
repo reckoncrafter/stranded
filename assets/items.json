@@ -1,0 +1,48 @@
+{
+    "alien_berry":{
+        "name" : "Alien Berry",
+        "nutrition" : 1,
+        "hydration" : 1
+    },
+    "raw_alien_meat":{
+        "name" : "Raw Alien Animal Meat",
+        "nutrition" : 2,
+        "hydration" : 0
+    },
+    "cooked_alien_meat":{
+        "name" : "Cooked Alien Animal Meat",
+        "nutrition" : 6,
+        "hydration" : 1
+    },
+    "alien_plant":{
+        "name" : "Alien Vegitation",
+        "nutrition" : 4,
+        "hydration" : 2
+    },
+    "mre":{
+        "name" : "Earthen MRE",
+        "nutrition" : 10,
+        "hydration" : 3
+    },
+    "safe_water":{
+        "name" : "Potable Water",
+        "nutrition" : 0,
+        "hydration" : 5
+    },
+    "unsafe_water":{
+        "name" : "Non-Potable Water",
+        "nutrition" : 0,
+        "hydration" : -3
+    },
+
+    "stone":{
+        "name" : "Stone"
+    },
+    "wood":{
+        "name" : "Alien Wood"
+    },
+    
+    "tablet":{
+        "name":"Mysterious Alien Tablet"
+    }
+}
