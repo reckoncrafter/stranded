@@ -1,12 +1,13 @@
 #include "../headers/main.h"
-using namespace std;
+
+#define NUM_ITEMS 8
+#define NUM_POIS 2
 
 SDL_Point placeLocation(double hm[HM_SIZE][HM_SIZE]){
     while(true){
         int x = rand()%HM_SIZE;
         int y = rand()%HM_SIZE;
         if(hm[x][y] < 0.4){
-            cout << hm[x][y] << endl;
             continue;
         }
         return {x,y};
@@ -17,6 +18,8 @@ SDL_Point placeLocation(double hm[HM_SIZE][HM_SIZE]){
 int main(){
     srand(time(NULL));
     Window map;
+    Text text;
+    Player player;
 
     if(map.OnInit() == false){
         return -1;
@@ -32,9 +35,19 @@ int main(){
 		}
 	}
 
-    SDL_Point Montressor = placeLocation(map.hm);
-    cout << Montressor.x << ", " << Montressor.y << endl;
+    SDL_Point origin = placeLocation(map.hm);
 
+    Item items[NUM_ITEMS];
+    SDL_Point pois[NUM_POIS];
+
+    for(int i = 0; i < NUM_ITEMS; i++){
+        items[i].pos = placeLocation(map.hm);
+    }
+    for(int i = 0; i < NUM_POIS; i++){
+        pois[i] = placeLocation(map.hm);
+    }
+
+    text.OnWake();
 
     SDL_Event Event;
     while(map.running){
@@ -45,10 +58,32 @@ int main(){
         
         map.OnRender();
         // Additional Rendering
+        // Icons
+        for(int i = 0; i < NUM_ITEMS; i++){
+            SDL_Rect R;
+            R.h = 8;
+            R.w = 8;
+            R.x = items[i].pos.x;
+            R.y = items[i].pos.y;
+            SDL_RenderCopy(map.renderer, map.item, NULL, &R);
+        }
+        for(int i = 0; i < NUM_POIS; i++){
+            SDL_Rect R;
+            R.h = 8;
+            R.w = 8;
+            R.x = pois[i].x;
+            R.y = pois[i].y;
+            SDL_RenderCopy(map.renderer, map.poi, NULL, &R);
+        }
+
+        // Crosshairs
         SDL_SetRenderDrawColor(map.renderer, 255, 0, 0, 255);
-        SDL_RenderDrawPoint(map.renderer, Montressor.x, Montressor.y);
+        SDL_RenderDrawLine(map.renderer, origin.x, 0, origin.x, map.window_height);
+        SDL_RenderDrawLine(map.renderer, 0, origin.y, map.window_width, origin.y);
+
         //
         SDL_RenderPresent(map.renderer);
+        text.Action(player);
         SDL_RenderClear(map.renderer);
     }
 }

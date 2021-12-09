@@ -1,0 +1,13 @@
+{
+    "wake": [
+        "You slowly regain conciousness..",
+        "You look around at the smouldering remains of your ship..",
+        "This will do as a shelter for a while, but you can't stay here forever if you want to get home.."
+    ],
+    "search":{
+        "alreadySearched" : "You've already looked around, there's nothing else to find.",
+        "food": "You go searching nearby, and find something that looks edible.",
+        "water": "You go searching nearby, and find a clear liquid. It looks like water, and turns out, it is.",
+        "nothing": "You go searching nearby, and find nothing of value.."
+    }
+}

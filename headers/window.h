@@ -13,6 +13,9 @@ public:
     SDL_Color grass = {121, 180, 115, 255};
     SDL_Color snow = {199, 199, 204, 255};
 
+    SDL_Texture* item;
+    SDL_Texture* poi;
+
 public:
     bool running = true;
 

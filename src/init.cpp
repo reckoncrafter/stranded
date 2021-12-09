@@ -16,6 +16,13 @@ bool Window::OnInit(){
     if (SDL_RenderSetLogicalSize(renderer, 256, 256) < 0){
         return false;
     }
-    
+
+    surface = SDL_LoadBMP("assets/item.bmp");
+    item = SDL_CreateTextureFromSurface(renderer, surface);
+
+    surface = SDL_LoadBMP("assets/alert.bmp");
+    poi = SDL_CreateTextureFromSurface(renderer, surface);
+
+    SDL_FreeSurface(surface);
     return true;
 }
