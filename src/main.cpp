@@ -15,6 +15,21 @@ SDL_Point placeLocation(double hm[HM_SIZE][HM_SIZE]){
     return {0,0};
 }
 
+Json::Value* GetJson(std::string filename){
+    Json::Value* j = new Json::Value;
+    std::ifstream fin;
+    fin.open(filename);
+    Json::CharReaderBuilder builder;
+    Json::String errs;
+    bool r = Json::parseFromStream(builder, fin, j, &errs);
+    if(!r){
+        std::cerr << "Error: " << errs;
+        return nullptr;
+    }
+    fin.close();
+    return j;
+}
+
 int main(){
     srand(time(NULL));
     Window map;
@@ -35,11 +50,15 @@ int main(){
 		}
 	}
 
-    SDL_Point origin = placeLocation(map.hm);
+    if(player.position.x == 0 && player.position.y == 0){
+        player.position = placeLocation(map.hm);
+    }
 
     Cache items[NUM_ITEMS];
     SDL_Point pois[NUM_POIS];
 
+
+    // TODO: Read in locaiton values from state.json
     for(int i = 0; i < NUM_ITEMS; i++){
         items[i].pos = placeLocation(map.hm);
     }
@@ -78,12 +97,38 @@ int main(){
 
         // Crosshairs
         SDL_SetRenderDrawColor(map.renderer, 255, 0, 0, 255);
-        SDL_RenderDrawLine(map.renderer, origin.x, 0, origin.x, map.window_height);
-        SDL_RenderDrawLine(map.renderer, 0, origin.y, map.window_width, origin.y);
+        SDL_RenderDrawLine(map.renderer, player.position.x, 0, player.position.x, map.window_height);
+        SDL_RenderDrawLine(map.renderer, 0, player.position.y, map.window_width, player.position.y);
 
         //
         SDL_RenderPresent(map.renderer);
-        text.Action(player);
+        if(!text.Action(player)){
+            std::ofstream fout;
+            Json::StreamWriterBuilder builder;
+            builder["indentation"] = " ";
+            Json::StreamWriter* writer(builder.newStreamWriter());
+            fout.open("assets/state.json");
+
+            Json::Value newstate;
+            newstate["player"]["x"] = player.position.x;
+            newstate["player"]["y"] = player.position.y;
+            newstate["player"]["saturation"] = (int)player.saturation;
+            newstate["player"]["hydration"] = (int)player.hydration;
+
+            for(int i = 0; i < NUM_ITEMS; i++){
+                newstate["items"]["x"].append(items[i].pos.x);
+                newstate["items"]["y"].append(items[i].pos.y);
+            }
+            for(int i = 0; i < NUM_POIS; i++){
+                newstate["pois"]["x"].append(pois[i].x);
+                newstate["pois"]["y"].append(pois[i].y);
+            }
+            writer->write(newstate, &fout);
+
+            fout << endl; // don't even try asking me why this is required, just DON'T FUCKING MOVE IT
+
+            exit(EXIT_SUCCESS);
+        }
         SDL_RenderClear(map.renderer);
     }
 }

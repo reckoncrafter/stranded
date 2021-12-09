@@ -16,6 +16,8 @@
 #define SPEED_LIMITER 16666
 #define HM_SIZE 256
 
+Json::Value* GetJson(std::string filename);
+
 #include "../headers/window.h"
 #include "../headers/terminal.h"
 

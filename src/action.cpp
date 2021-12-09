@@ -6,7 +6,7 @@ void Text::OnWake(){
     }
 }
 
-void Text::Action(Player &P){
+bool Text::Action(Player &P){
     cout << "> ";
     string playerAct;
     getline(cin, playerAct);
@@ -65,9 +65,10 @@ void Text::Action(Player &P){
 
     else if(playerAct == "quit"){
         cout << messages["quit"].asString() << endl;
-        exit(EXIT_SUCCESS);
+        return false;
     }
     else{
         cout << "I'm sorry, I don't understand what you want to do.." << endl;
     }
+    return true;
 }

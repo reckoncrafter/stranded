@@ -2,8 +2,19 @@
 struct Player{
     constrained<int,0,100> saturation = 0;
     constrained<int,0,100> hydration = 0;
+    SDL_Point position;
+
+    Json::Value state;
 
     std::array<std::string, 20> inventory{""};
+
+    Player(){
+        state = *GetJson("assets/state.json");
+        saturation = state["player"]["saturation"].asInt();
+        hydration =  state["player"]["hydration"].asInt();
+        position.x = state["player"]["x"].asInt();
+        position.y = state["player"]["y"].asInt();
+    }
     bool putInInventory(std::string item){
         for(auto &i : inventory){
             if(i == ""){
@@ -24,22 +35,8 @@ public:
     Json::Value messages;
     Json::Value items;
     Text(){
-        std::ifstream fin;
-        fin.open("assets/messages.json");
-        Json::CharReaderBuilder builder;
-        Json::String errs;
-        bool r = Json::parseFromStream(builder, fin, &messages, &errs);
-        if(!r){
-            std::cerr << "Error: " << errs;
-            return;
-        }
-        fin.close();
-        fin.open("assets/items.json");
-        r = Json::parseFromStream(builder,fin,&items,&errs);
-        if(!r){
-            std::cerr << "Error: " << errs;
-            return;
-        }
+        messages = *GetJson("assets/messages.json");
+        items = *GetJson("assets/items.json");
     }
     
     // Status flags
@@ -47,5 +44,5 @@ public:
 
 
     void OnWake();
-    void Action(Player &P);
+    bool Action(Player &P);
 };
