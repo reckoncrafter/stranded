@@ -47,6 +47,7 @@ bool Text::Action(Player &P){
     }
 
     else if(playerAct == "inventory"){
+        int x = 0;
         for(auto i : P.inventory){
             if(i == ""){
                 cout << "[ ]" << endl;
@@ -59,6 +60,18 @@ bool Text::Action(Player &P){
                     cout << "[ ERROR ]" << endl;
                 }
             }
+            x++;
+        }
+    }
+
+    else if(playerAct == "go"){
+        if(P.canTravel){
+            cout << "Walking.." << endl;
+            P.position = P.desiredLocation;
+            P.canTravel = false;
+        }
+        else{
+            cout << "I don't know where you want to go.." << endl;
         }
     }
 

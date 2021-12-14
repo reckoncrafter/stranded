@@ -4,6 +4,9 @@ struct Player{
     constrained<int,0,100> hydration = 0;
     SDL_Point position;
 
+    SDL_Point desiredLocation;
+    bool canTravel = false;
+
     Json::Value state;
 
     std::array<std::string, 20> inventory{""};
@@ -24,10 +27,6 @@ struct Player{
         }
         return false;
     }
-};
-
-struct Cache{
-    SDL_Point pos;
 };
 
 class Text{

@@ -1,8 +1,5 @@
 #include "../headers/main.h"
 
-#define NUM_ITEMS 8
-#define NUM_POIS 2
-
 SDL_Point placeLocation(double hm[HM_SIZE][HM_SIZE]){
     while(true){
         int x = rand()%HM_SIZE;
@@ -30,6 +27,32 @@ Json::Value* GetJson(std::string filename){
     return j;
 }
 
+void SaveGameState(Window map, Player player){
+    std::ofstream fout;
+    Json::StreamWriterBuilder builder;
+    builder["indentation"] = " ";
+    Json::StreamWriter* writer(builder.newStreamWriter());
+    fout.open("assets/state.json");
+
+    Json::Value newstate;
+    newstate["player"]["x"] = player.position.x;
+    newstate["player"]["y"] = player.position.y;
+    newstate["player"]["saturation"] = (int)player.saturation;
+    newstate["player"]["hydration"] = (int)player.hydration;
+
+    for(int i = 0; i < NUM_ITEMS; i++){
+        newstate["items"]["x"].append(map.items[i].pos.x);
+        newstate["items"]["y"].append(map.items[i].pos.y);
+    }
+    for(int i = 0; i < NUM_POIS; i++){
+        newstate["pois"]["x"].append(map.pois[i].x);
+        newstate["pois"]["y"].append(map.pois[i].y);
+    }
+    writer->write(newstate, &fout);
+
+    fout << endl; // don't even try asking me why this is required, just DON'T FUCKING MOVE IT
+}
+
 int main(){
     srand(time(NULL));
     Window map;
@@ -54,25 +77,32 @@ int main(){
         player.position = placeLocation(map.hm);
     }
 
-    Cache items[NUM_ITEMS];
-    SDL_Point pois[NUM_POIS];
-
-
     // TODO: Read in locaiton values from state.json
     for(int i = 0; i < NUM_ITEMS; i++){
-        items[i].pos = placeLocation(map.hm);
+        map.items[i].pos = placeLocation(map.hm);
     }
     for(int i = 0; i < NUM_POIS; i++){
-        pois[i] = placeLocation(map.hm);
+        map.pois[i] = placeLocation(map.hm);
     }
 
     text.OnWake();
 
+    auto text_loop = [&player, &text, &map](){
+        while(true){
+            if(!text.Action(player)){
+                break;
+            }               
+        }
+        SaveGameState(map, player);
+        exit(EXIT_SUCCESS);
+    };
+    thread text_thread(text_loop);
+
     SDL_Event Event;
     while(map.running){
-        usleep(SPEED_LIMITER);
-        while(SDL_PollEvent(&Event)){
-            map.OnEvent(&Event);
+        usleep(SPEED_LIMITER*10);
+        while(SDL_PollEvent(&Event)){;
+            map.OnEvent(&Event, &player);
         }
         
         map.OnRender();
@@ -82,16 +112,16 @@ int main(){
             SDL_Rect R;
             R.h = 8;
             R.w = 8;
-            R.x = items[i].pos.x;
-            R.y = items[i].pos.y;
+            R.x = map.items[i].pos.x;
+            R.y = map.items[i].pos.y;
             SDL_RenderCopy(map.renderer, map.item, NULL, &R);
         }
         for(int i = 0; i < NUM_POIS; i++){
             SDL_Rect R;
             R.h = 8;
             R.w = 8;
-            R.x = pois[i].x;
-            R.y = pois[i].y;
+            R.x = map.pois[i].x;
+            R.y = map.pois[i].y;
             SDL_RenderCopy(map.renderer, map.poi, NULL, &R);
         }
 
@@ -102,33 +132,6 @@ int main(){
 
         //
         SDL_RenderPresent(map.renderer);
-        if(!text.Action(player)){
-            std::ofstream fout;
-            Json::StreamWriterBuilder builder;
-            builder["indentation"] = " ";
-            Json::StreamWriter* writer(builder.newStreamWriter());
-            fout.open("assets/state.json");
-
-            Json::Value newstate;
-            newstate["player"]["x"] = player.position.x;
-            newstate["player"]["y"] = player.position.y;
-            newstate["player"]["saturation"] = (int)player.saturation;
-            newstate["player"]["hydration"] = (int)player.hydration;
-
-            for(int i = 0; i < NUM_ITEMS; i++){
-                newstate["items"]["x"].append(items[i].pos.x);
-                newstate["items"]["y"].append(items[i].pos.y);
-            }
-            for(int i = 0; i < NUM_POIS; i++){
-                newstate["pois"]["x"].append(pois[i].x);
-                newstate["pois"]["y"].append(pois[i].y);
-            }
-            writer->write(newstate, &fout);
-
-            fout << endl; // don't even try asking me why this is required, just DON'T FUCKING MOVE IT
-
-            exit(EXIT_SUCCESS);
-        }
         SDL_RenderClear(map.renderer);
     }
 }

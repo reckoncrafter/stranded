@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <cmath>
+#include <thread>
 #include <string>
 #include <unistd.h>
 #include <random>
@@ -15,11 +17,13 @@
 
 #define SPEED_LIMITER 16666
 #define HM_SIZE 256
+#define NUM_ITEMS 8
+#define NUM_POIS 2
 
 Json::Value* GetJson(std::string filename);
 
-#include "../headers/window.h"
 #include "../headers/terminal.h"
+#include "../headers/window.h"
 
 using namespace std;
 #endif
