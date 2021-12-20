@@ -40,6 +40,14 @@ bool Text::Action(Player &P){
             cout << messages["search"]["alreadySearched"].asString() << endl;
         }
     }
+    else if(playerAct == "search cache"){
+        if(P.isNearCache){
+            cout << messages["search"]["cache"].asString() << endl;
+        }
+        else{
+            cout << messages["search"]["noCache"].asString() << endl;
+        }
+    }
 
     else if(playerAct == "status"){
         cout << "Saturation: " << (int)P.saturation << endl;

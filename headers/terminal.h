@@ -6,6 +6,7 @@ struct Player{
 
     SDL_Point desiredLocation;
     bool canTravel = false;
+    bool isNearCache = false;
 
     Json::Value state;
 

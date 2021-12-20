@@ -15,7 +15,15 @@ void Window::OnEvent(SDL_Event* Event, Player* player){
                     std::cout << "Type 'go' to travel" << std::endl;
                     player->canTravel = true;
                     player->desiredLocation = it.pos;
+                    player->isNearCache = true;
                 }
+            }
+            if(!player->canTravel){
+                std::cout << "This point is " << CalculateDistance(player->position, click) << " pixels away" << std::endl;
+                std::cout << "Type 'go' to travel" << std::endl;
+                player->canTravel = true;
+                player->desiredLocation = click;
+                player->isNearCache = false;
             }
             break;
     }

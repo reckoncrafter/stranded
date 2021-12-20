@@ -8,7 +8,9 @@
         "alreadySearched" : "You've already looked around, there's nothing else to find.",
         "food": "You go searching nearby, and find something that looks edible.",
         "water": "You go searching nearby, and find a clear liquid. It looks like water, and turns out, it is.",
-        "nothing": "You go searching nearby, and find nothing of value.."
+        "nothing": "You go searching nearby, and find nothing of value..",
+        "cache": "You dig until you find the buried cache, and break it open",
+        "noCache": "There's no cache nearby to search"
     },
     "quit": "You need to rest.. It's been a long day.."
 }
