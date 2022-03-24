@@ -22,6 +22,7 @@ bool Text::Action(Player &P){
             switch(sel){
                 case 0:
                     cout << messages["search"]["food"].asString() << endl;
+                    // needs to be randomized
                     P.putInInventory("alien_berry");
                     break;
                 case 1:

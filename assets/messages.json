@@ -12,5 +12,17 @@
         "cache": "You dig until you find the buried cache, and break it open",
         "noCache": "There's no cache nearby to search"
     },
+    "character":{
+        "pinkAlien":{
+            "greeting":{
+                "1": "",
+                "2": "",
+                "3": ""
+            },
+            "encounter":{
+                "1": "A creature slowly emerges from the water nearby. It stares at you with nervous eyes."
+            }
+        }
+    },
     "quit": "You need to rest.. It's been a long day.."
 }
